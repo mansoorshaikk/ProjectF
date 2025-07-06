@@ -1,0 +1,15 @@
+from supabase_client import supabase
+from typing import Optional, Dict
+
+def get_user_by_email(email: str) -> Optional[Dict]:
+    try:
+        auth_user = supabase.auth.admin.get_user_by_email(email)
+        user_id = auth_user.user.id if auth_user.user else None
+
+        if not user_id:
+            return None
+
+        result = supabase.table("users").select("*").eq("id", user_id).single().execute()
+        return result.data if result.data else None
+    except Exception:
+        return None

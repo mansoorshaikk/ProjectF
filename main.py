@@ -5,4 +5,4 @@ from fastapi.templating import Jinja2Templates
 app = FastAPI()
 
 templates = Jinja2Templates(directory="templates")
-app.include_router(auth_router.router)
+app.include_router(auth_router)

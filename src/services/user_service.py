@@ -12,3 +12,7 @@ class UserService:
         user = self.user_repository.login_user(email,password)
         return user
 
+    def current_user(self,session_token):
+        user = self.user_repository.current_user(session_token)
+        return user
+

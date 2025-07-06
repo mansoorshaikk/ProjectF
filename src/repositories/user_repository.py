@@ -1,6 +1,6 @@
 import os
 
-from supabase  import create_client
+from supabase import create_client
 from typing import Optional, Dict
 from dotenv import load_dotenv
 
@@ -21,4 +21,7 @@ class UserRepository:
         user = self.supabase.auth.sign_in_with_password({"email":email,"password":password})
         return user
 
+    def current_user(self, session_token):
+        user = self.supabase.auth.get_user(session_token)
+        return user
 

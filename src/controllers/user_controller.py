@@ -43,7 +43,7 @@ def get_login(request:Request):
             status_code=status.HTTP_303_SEE_OTHER
         )
     else:
-        return templates.TemplateResponse("signup.html", {"request": request})
+        return templates.TemplateResponse("login.html", {"request": request})
 
 @router.post("/api/signup")
 def make_signup(request:Request,email:str =Form(...),password:str = Form(...)):

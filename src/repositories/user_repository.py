@@ -4,13 +4,19 @@ from supabase import create_client
 from typing import Optional, Dict
 from dotenv import load_dotenv
 
+import os
+from supabase import create_client
 
 class UserRepository:
     def __init__(self):
-        load_dotenv()
+        
+        SUPABASE_URL = "https://tmqfrqpehwwclkclwkxr.supabase.co"
+        SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtcWZycXBlaHd3Y2xrY2x3a3hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk4OTIxNDQsImV4cCI6MjA2NTQ2ODE0NH0.TSpIVEgkrlRNtrGoO-yGDhemhZNYX7VyMmizS4iVoBE"
+
+        
         self.supabase = create_client(
-            os.getenv("SUPABASE_URL"),
-            os.getenv("SUPABASE_KEY")
+            os.getenv("SUPABASE_URL", SUPABASE_URL),
+            os.getenv("SUPABASE_KEY", SUPABASE_KEY)
         )
 
     def signup_user(self,email,password):

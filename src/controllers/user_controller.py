@@ -90,3 +90,4 @@ def make_login(request:Request,email:str =Form(...),password:str = Form(...)):
 def get_dashboard(request:Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
+

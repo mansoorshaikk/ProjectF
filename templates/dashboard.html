@@ -279,6 +279,59 @@
             transform: translateY(-2px);
         }
 
+        /* Logout Modal */
+        .logout-modal .modal-content {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .logout-modal .modal-header {
+            border-bottom: 1px solid #eee;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .logout-modal .btn-close {
+            filter: invert(1);
+        }
+
+        .logout-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .spinner-border-lg {
+            width: 3rem;
+            height: 3rem;
+            border-width: 0.3em;
+        }
+
         @media (max-width: 768px) {
             .welcome-title {
                 font-size: 2rem;
@@ -302,7 +355,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <h1 class="brand-title mb-0">
-                            <i class="fas fa-quote-left me-2"></i>
+                            <i class="fas fa-water me-2" style="color:#667eea;"></i>
                             Testimonial Hub
                         </h1>
                     </div>
@@ -310,7 +363,6 @@
                         <div class="user-info justify-content-end">
                             <div class="text-end me-3">
                                 <div class="fw-bold">Welcome back!</div>
-
                                 <small class="text-muted">Administrator</small>
                             </div>
                             <div class="user-avatar">
@@ -318,15 +370,16 @@
                             </div>
                             <div class="dropdown">
                                 <button class="btn btn-outline-primary dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown">
-                                    <i class="fas fa-cog"></i>
+                                    <i class="fas fa-user me-2"></i>Profile
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit me-2"></i>Profile</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit me-2"></i>Edit Profile</a></li>
                                     <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                                 </ul>
                             </div>
+                            <button class="btn btn-outline-danger ms-2" type="button" onclick="showLogoutModal()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -383,14 +436,29 @@
                                 Quick Actions
                             </h3>
                         </div>
-                        <div class="col-md-4">
-                            <a href="#" class="action-card">
-                                <div class="text-center">
-                                    <i class="fas fa-plus action-icon"></i>
-                                    <h4 class="action-title">Create Testimonial</h4>
-                                    <p class="action-description">Add a new customer testimonial to your collection</p>
-                                </div>
-                            </a>
+                        <div class="col-md-12 mb-4">
+                            <div class="card p-4 shadow-sm">
+                                <h5 class="mb-3"><i class="fas fa-plus me-2"></i>Add Testimonial</h5>
+                                <form id="testimonialForm" method="post" action="/company/testimonial" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="testimonialType" class="form-label">Testimonial Type</label>
+                                        <select class="form-select" id="testimonialType" name="type" required onchange="toggleTestimonialInput()">
+                                            <option value="text">Text</option>
+                                            <option value="video">Video</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3" id="textTestimonialDiv">
+                                        <label for="testimonialText" class="form-label">Text Testimonial</label>
+                                        <textarea class="form-control" id="testimonialText" name="text" rows="3" placeholder="Write your testimonial..."></textarea>
+                                    </div>
+                                    <div class="mb-3 d-none" id="videoTestimonialDiv">
+                                        <label for="testimonialVideo" class="form-label">Video Testimonial (Upload MP4 or paste YouTube URL)</label>
+                                        <input type="file" class="form-control mb-2" id="testimonialVideo" name="video" accept="video/mp4">
+                                        <input type="url" class="form-control" id="testimonialVideoUrl" name="video_url" placeholder="Or paste YouTube video URL">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-2"></i>Submit Testimonial</button>
+                                </form>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <a href="#" class="action-card">
@@ -488,6 +556,221 @@
         </main>
     </div>
 
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade logout-modal" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        Confirm Logout
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center py-3">
+                        <i class="fas fa-question-circle text-warning" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h6>Are you sure you want to logout?</h6>
+                        <p class="text-muted mb-0">You will be redirected to the login page.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="performLogout()">
+                        <div class="logout-spinner spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <i class="fas fa-sign-out-alt me-2"></i>Yes, Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner-border spinner-border-lg text-primary mb-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h5>Logging out...</h5>
+            <p class="text-muted mb-0">Please wait while we securely log you out.</p>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Show logout confirmation modal
+        function showLogoutModal() {
+            const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            logoutModal.show();
+        }
+
+        // Perform logout with loading states
+        async function performLogout() {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('logoutModal'));
+            const spinner = document.querySelector('.logout-spinner');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            // Show loading spinner on button
+            spinner.style.display = 'inline-block';
+            
+            try {
+                // Hide modal and show full-screen loading
+                modal.hide();
+                loadingOverlay.style.display = 'flex';
+                
+                // Simulate logout API call (replace with your actual logout endpoint)
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getAuthToken()}` // Replace with your token method
+                    },
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    // Clear any stored authentication data
+                    clearAuthData();
+                    
+                    // Redirect to login page after a short delay
+                    setTimeout(() => {
+                        window.location.href = '/login'; // Replace with your login page URL
+                    }, 1500);
+                } else {
+                    throw new Error('Logout failed');
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                
+                // Hide loading overlay
+                loadingOverlay.style.display = 'none';
+                spinner.style.display = 'none';
+                
+                // Show error message
+                showErrorMessage('Logout failed. Please try again.');
+                
+                // Force logout anyway after showing error
+                setTimeout(() => {
+                    clearAuthData();
+                    window.location.href = '/login';
+                }, 2000);
+            }
+        }
+
+        // Get authentication token (customize based on your auth implementation)
+        function getAuthToken() {
+            // Example implementations:
+            // return localStorage.getItem('authToken');
+            // return document.cookie.split('; ').find(row => row.startsWith('token='))?.split('=')[1];
+            // return sessionStorage.getItem('token');
+            
+            // For demonstration - replace with your actual token retrieval
+            return 'your-auth-token-here';
+        }
+
+        // Clear authentication data
+        function clearAuthData() {
+            // Clear all possible auth storage locations
+            // Note: In Claude artifacts, localStorage is not available, but this shows the pattern
+            
+            // Example implementations:
+            // localStorage.removeItem('authToken');
+            // localStorage.removeItem('user');
+            // sessionStorage.clear();
+            
+            // Clear cookies (if using cookie-based auth)
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            console.log('Auth data cleared');
+        }
+
+        // Show error message
+        function showErrorMessage(message) {
+            // Create and show error toast/alert
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed';
+            alertDiv.style.top = '20px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.innerHTML = `
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Add keyboard shortcut for logout (Ctrl+L)
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.key === 'l') {
+                event.preventDefault();
+                showLogoutModal();
+            }
+        });
+
+        // Warn user before leaving if there are unsaved changes
+        window.addEventListener('beforeunload', function(event) {
+            // Only show warning if user has unsaved changes
+            // This is just an example - customize based on your needs
+            const hasUnsavedChanges = false; // Replace with your logic
+            
+            if (hasUnsavedChanges) {
+                event.preventDefault();
+                event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+                return event.returnValue;
+            }
+        });
+
+        // Auto-logout after period of inactivity (optional)
+        let inactivityTimer;
+        const INACTIVITY_TIME = 30 * 60 * 1000; // 30 minutes
+
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                alert('You have been logged out due to inactivity.');
+                performLogout();
+            }, INACTIVITY_TIME);
+        }
+
+        // Reset timer on user activity
+        ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
+            document.addEventListener(event, resetInactivityTimer, true);
+        });
+
+        // Initialize inactivity timer
+        resetInactivityTimer();
+
+        function toggleTestimonialInput() {
+            const type = document.getElementById('testimonialType').value;
+            const textDiv = document.getElementById('textTestimonialDiv');
+            const videoDiv = document.getElementById('videoTestimonialDiv');
+            if (type === 'text') {
+                textDiv.classList.remove('d-none');
+                videoDiv.classList.add('d-none');
+            } else {
+                textDiv.classList.add('d-none');
+                videoDiv.classList.remove('d-none');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleTestimonialInput();
+        });
+    </script>
 </body>
 </html>

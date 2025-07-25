@@ -69,6 +69,14 @@
                 <label for="password" class="form-label">Password</label>
                 <input required type="password" class="form-control" id="password" name="password" placeholder="Create a password">
             </div>
+            <div class="mb-3">
+                <label for="role" class="form-label">Select Role</label>
+                <select name="role" id="role" required class="form-select">
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="user">User</option>
+                    <option value="company">Company</option>
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary w-100">Create Account</button>
             <a href="/login" class="btn btn-outline w-100">Already have an account? Login</a>
         </form>

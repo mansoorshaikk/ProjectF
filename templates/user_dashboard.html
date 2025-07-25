@@ -252,6 +252,142 @@
             box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
             background: linear-gradient(135deg, #ff5252, #ff1744);
         }
+
+       /* Search Section Styles */
+       .search-section {
+           background: white;
+           border-radius: 15px;
+           padding: 2rem;
+           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+           margin-bottom: 2rem;
+       }
+
+       .search-input {
+           border-radius: 25px 0 0 25px;
+           border: 2px solid #e9ecef;
+           padding: 0.75rem 1.5rem;
+           font-size: 1rem;
+           transition: all 0.3s ease;
+       }
+
+       .search-input:focus {
+           border-color: var(--primary-color);
+           box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+       }
+
+       .input-group .btn {
+           border-radius: 0 25px 25px 0;
+           border: 2px solid var(--primary-color);
+           border-left: none;
+       }
+
+       .search-results {
+           max-height: 400px;
+           overflow-y: auto;
+       }
+
+       .company-result {
+           background: #f8f9fa;
+           border-radius: 10px;
+           padding: 1rem;
+           margin-bottom: 1rem;
+           cursor: pointer;
+           transition: all 0.3s ease;
+           border: 2px solid transparent;
+       }
+
+       .company-result:hover {
+           background: #e9ecef;
+           border-color: var(--primary-color);
+           transform: translateY(-2px);
+       }
+
+       .company-name {
+           font-weight: 600;
+           color: var(--primary-color);
+           margin-bottom: 0.5rem;
+       }
+
+       .company-description {
+           color: #666;
+           font-size: 0.9rem;
+           margin-bottom: 0.5rem;
+       }
+
+       .company-website {
+           color: #999;
+           font-size: 0.8rem;
+       }
+
+       .loading-spinner {
+           text-align: center;
+           padding: 2rem;
+           color: #666;
+       }
+
+       .no-results {
+           text-align: center;
+           padding: 2rem;
+           color: #666;
+           font-style: italic;
+       }
+
+       /* Testimonials Modal */
+       .testimonials-modal .modal-dialog {
+           max-width: 800px;
+       }
+
+       .testimonials-modal .modal-content {
+           border-radius: 20px;
+           border: none;
+           box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+       }
+
+       .testimonials-modal .modal-header {
+           background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+           color: white;
+           border-radius: 20px 20px 0 0;
+           border-bottom: none;
+       }
+
+       .testimonials-modal .btn-close {
+           filter: invert(1);
+       }
+
+       .testimonial-item {
+           background: #f8f9fa;
+           border-radius: 10px;
+           padding: 1.5rem;
+           margin-bottom: 1rem;
+           border-left: 4px solid var(--primary-color);
+       }
+
+       .testimonial-content {
+           font-style: italic;
+           margin-bottom: 1rem;
+           line-height: 1.6;
+       }
+
+       .testimonial-meta {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           font-size: 0.9rem;
+           color: #666;
+       }
+
+       .testimonial-rating {
+           color: #ffc107;
+       }
+
+       .testimonial-author {
+           font-weight: 600;
+       }
+
+       .testimonial-date {
+           color: #999;
+       }
+
         @media (max-width: 768px) {
             .welcome-title {
                 font-size: 2rem;
@@ -319,6 +455,27 @@
                         <h2 class="welcome-title">Your Testimonial Activity</h2>
                         <p class="welcome-subtitle">View and manage your submitted testimonials and feedback</p>
                     </div>
+                    <!-- Company Search Section -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="search-section">
+                                <h3 class="section-title">
+                                    <i class="fas fa-search"></i>
+                                    Search Companies
+                                </h3>
+                                <div class="search-container">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control search-input" id="companySearch" placeholder="Search for companies to view their testimonials...">
+                                        <button class="btn btn-primary" type="button" id="searchBtn">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                    <div id="searchResults" class="search-results mt-3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Stats Cards -->
                     <div class="row mb-4">
                         <div class="col-md-4">
@@ -445,5 +602,235 @@
         </main>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Testimonials Modal -->
+    <div class="modal fade testimonials-modal" id="testimonialsModal" tabindex="-1" aria-labelledby="testimonialsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="testimonialsModalLabel">
+                        <i class="fas fa-building me-2"></i>
+                        <span id="companyModalName">Company Testimonials</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="companyInfo" class="mb-4"></div>
+                    <div id="testimonialsContent">
+                        <div class="loading-spinner">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading testimonials...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Search functionality
+        let searchTimeout;
+        const searchInput = document.getElementById('companySearch');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchResults = document.getElementById('searchResults');
+
+        // Debounced search function
+        function performSearch() {
+            const query = searchInput.value.trim();
+            
+            if (query.length < 2) {
+                searchResults.innerHTML = '';
+                return;
+            }
+
+            // Show loading
+            searchResults.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Searching companies...</p>
+                </div>
+            `;
+
+            // Perform search
+            fetch(`/api/search/companies?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    displaySearchResults(data.companies);
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                    searchResults.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-exclamation-triangle text-warning mb-2" style="font-size: 2rem;"></i>
+                            <p>Error searching companies. Please try again.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        // Display search results
+        function displaySearchResults(companies) {
+            if (companies.length === 0) {
+                searchResults.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search text-muted mb-2" style="font-size: 2rem;"></i>
+                        <p>No companies found matching your search.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const resultsHtml = companies.map(company => `
+                <div class="company-result" onclick="viewCompanyTestimonials('${company.id}', '${company.name.replace(/'/g, "\\'")}')">
+                    <div class="company-name">${escapeHtml(company.name)}</div>
+                    <div class="company-description">${escapeHtml(company.description || 'No description available')}</div>
+                    ${company.website ? `<div class="company-website"><i class="fas fa-globe me-1"></i>${escapeHtml(company.website)}</div>` : ''}
+                </div>
+            `).join('');
+
+            searchResults.innerHTML = resultsHtml;
+        }
+
+        // View company testimonials
+        function viewCompanyTestimonials(companyId, companyName) {
+            const modal = new bootstrap.Modal(document.getElementById('testimonialsModal'));
+            const modalTitle = document.getElementById('companyModalName');
+            const companyInfo = document.getElementById('companyInfo');
+            const testimonialsContent = document.getElementById('testimonialsContent');
+
+            // Set modal title
+            modalTitle.textContent = `${companyName} - Testimonials`;
+
+            // Reset content
+            companyInfo.innerHTML = '';
+            testimonialsContent.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading testimonials...</p>
+                </div>
+            `;
+
+            // Show modal
+            modal.show();
+
+            // Fetch testimonials
+            fetch(`/api/companies/${companyId}/testimonials`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    displayCompanyTestimonials(data.company, data.testimonials);
+                })
+                .catch(error => {
+                    console.error('Error loading testimonials:', error);
+                    testimonialsContent.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-exclamation-triangle text-warning mb-2" style="font-size: 2rem;"></i>
+                            <p>Error loading testimonials. Please try again.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        // Display company testimonials
+        function displayCompanyTestimonials(company, testimonials) {
+            const companyInfo = document.getElementById('companyInfo');
+            const testimonialsContent = document.getElementById('testimonialsContent');
+
+            // Display company info
+            companyInfo.innerHTML = `
+                <div class="company-info-card p-3 bg-light rounded">
+                    <h6 class="mb-2"><i class="fas fa-building me-2"></i>${escapeHtml(company.name)}</h6>
+                    ${company.description ? `<p class="mb-2 text-muted">${escapeHtml(company.description)}</p>` : ''}
+                    ${company.website ? `<p class="mb-0"><i class="fas fa-globe me-2"></i><a href="${escapeHtml(company.website)}" target="_blank" class="text-decoration-none">${escapeHtml(company.website)}</a></p>` : ''}
+                </div>
+            `;
+
+            // Display testimonials
+            if (testimonials.length === 0) {
+                testimonialsContent.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-comment-slash text-muted mb-2" style="font-size: 2rem;"></i>
+                        <p>No testimonials available for this company yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const testimonialsHtml = testimonials.map(testimonial => {
+                const rating = '★'.repeat(testimonial.rating) + '☆'.repeat(5 - testimonial.rating);
+                const createdDate = new Date(testimonial.created_at).toLocaleDateString();
+                const authorEmail = testimonial.profiles?.email || 'Anonymous';
+                
+                return `
+                    <div class="testimonial-item">
+                        <div class="testimonial-content">
+                            "${escapeHtml(testimonial.content || 'No content available')}"
+                        </div>
+                        <div class="testimonial-meta">
+                            <div>
+                                <span class="testimonial-rating">${rating}</span>
+                                <span class="testimonial-author ms-2">- ${escapeHtml(authorEmail)}</span>
+                            </div>
+                            <div class="testimonial-date">${createdDate}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            testimonialsContent.innerHTML = `
+                <h6 class="mb-3"><i class="fas fa-comments me-2"></i>Customer Testimonials (${testimonials.length})</h6>
+                ${testimonialsHtml}
+            `;
+        }
+
+        // Utility function to escape HTML
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(performSearch, 300);
+        });
+
+        searchBtn.addEventListener('click', performSearch);
+
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
+        });
+
+        // Clear results when input is cleared
+        searchInput.addEventListener('input', function() {
+            if (this.value.trim().length === 0) {
+                searchResults.innerHTML = '';
+            }
+        });
+    </script>
 </body>
 </html>

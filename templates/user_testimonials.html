@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Testimonials - Test Floww</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #4facfe;
+            --warning-color: #ffc107;
+            --danger-color: #ff6b6b;
+            --dark-bg: #0f0f23;
+            --dark-card: #1a1a2e;
+            --dark-text: #ffffff;
+            --dark-text-muted: #a0a0a0;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .brand-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .testimonials-container {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .testimonials-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--dark-card);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            color: var(--dark-text-muted);
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--dark-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--dark-text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-total { color: var(--primary-color); }
+        .stat-pending { color: var(--warning-color); }
+        .stat-approved { color: var(--success-color); }
+        .stat-rejected { color: var(--danger-color); }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-approved {
+            background: rgba(79, 172, 254, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-rejected {
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--danger-color);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--dark-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .testimonial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .company-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .testimonial-date {
+            color: var(--dark-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .testimonial-content {
+            color: var(--dark-text);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .star {
+            color: #ffc107;
+            font-size: 1.1rem;
+        }
+
+        .testimonial-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .like-count {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--dark-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .back-button {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .no-testimonials {
+            text-align: center;
+            padding: 3rem;
+            color: var(--dark-text-muted);
+        }
+
+        .no-testimonials i {
+            font-size: 4rem;
+            color: var(--dark-text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn-custom {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-outline-custom {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline-custom:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        /* Comment Section */
+        .comments-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comments-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+
+        .comment-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .comment-date {
+            color: var(--dark-text-muted);
+            font-size: 0.8rem;
+        }
+
+        .comment-text {
+            color: var(--dark-text);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .add-comment-form {
+            margin-top: 1rem;
+        }
+
+        .comment-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--dark-text);
+            border-radius: 10px;
+            padding: 0.75rem;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
+            color: var(--dark-text);
+            outline: none;
+        }
+
+        .comment-input::placeholder {
+            color: var(--dark-text-muted);
+        }
+
+        .btn-comment {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-comment:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .testimonials-container {
+                padding: 1rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="brand-title">
+                    <i class="fas fa-water"></i> Test Floww
+                </div>
+                <a href="/user/dashboard" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="testimonials-container">
+                <div class="page-header">
+                    <h1 class="page-title">My Testimonials</h1>
+                    <div class="testimonials-count">
+                        <i class="fas fa-quote-left"></i>
+                        {{ testimonials|length }} Testimonial{{ 's' if testimonials|length != 1 else '' }}
+                    </div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number stat-total">{{ stats.total }}</div>
+                        <div class="stat-label">Total Testimonials</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number stat-pending">{{ stats.pending }}</div>
+                        <div class="stat-label">Pending Approval</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number stat-approved">{{ stats.approved }}</div>
+                        <div class="stat-label">Approved</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number stat-rejected">{{ stats.rejected }}</div>
+                        <div class="stat-label">Rejected</div>
+                    </div>
+                </div>
+
+                {% if testimonials %}
+                    <div class="testimonials-grid">
+                        {% for testimonial in testimonials %}
+                            <div class="testimonial-card">
+                                <div class="testimonial-header">
+                                    <div>
+                                        <div class="company-name">
+                                            {% for company in companies %}
+                                                {% if company.id == testimonial.company_id %}
+                                                    {{ company.name }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <div class="testimonial-date">
+                                            {{ testimonial.created_at.split('T')[0] if testimonial.created_at else 'Unknown date' }}
+                                        </div>
+                                    </div>
+                                    <span class="status-badge status-{{ testimonial.status or 'pending' }}">
+                                        {{ testimonial.status or 'pending' }}
+                                    </span>
+                                </div>
+                                
+                                <div class="testimonial-content">{{ testimonial.text }}</div>
+                                
+                                {% if testimonial.rating and testimonial.rating > 0 %}
+                                    <div class="testimonial-rating">
+                                        {% for i in range(5) %}
+                                            <i class="fas fa-star star {% if i < testimonial.rating %}filled{% endif %}"></i>
+                                        {% endfor %}
+                                        <span class="ms-2">{{ testimonial.rating }}/5</span>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="testimonial-actions">
+                                    <span class="like-count">
+                                        <i class="fas fa-thumbs-up"></i>
+                                        {{ testimonial.likes or 0 }} likes
+                                    </span>
+                                </div>
+
+                                <!-- Comments Section -->
+                                <div class="comments-section">
+                                    <div class="comments-title">
+                                        <i class="fas fa-comments"></i> Comments
+                                    </div>
+                                    
+                                    <div id="comments-{{ testimonial.id }}" class="comments-list">
+                                        <!-- Comments will be loaded here -->
+                                    </div>
+                                    
+                                    <form class="add-comment-form" onsubmit="addComment(event, {{ testimonial.id }})">
+                                        <input type="text" class="comment-input" placeholder="Add a comment..." id="comment-input-{{ testimonial.id }}" required>
+                                        <button type="submit" class="btn-comment">
+                                            <i class="fas fa-paper-plane"></i> Comment
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-testimonials">
+                        <i class="fas fa-comment-slash"></i>
+                        <h3>No Testimonials Yet</h3>
+                        <p>You haven't created any testimonials yet. Start sharing your experiences!</p>
+                        <div class="action-buttons">
+                            <a href="/create-testimonial" class="btn-custom">
+                                <i class="fas fa-plus"></i>
+                                Create Your First Testimonial
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Load comments for each testimonial
+        document.addEventListener('DOMContentLoaded', function() {
+            const testimonials = document.querySelectorAll('.testimonial-card');
+            testimonials.forEach(card => {
+                const testimonialId = card.querySelector('.comments-section').getAttribute('id').match(/\d+/)[0];
+                loadComments(testimonialId);
+            });
+        });
+
+        async function loadComments(testimonialId) {
+            try {
+                const response = await fetch(`/api/testimonials/${testimonialId}/comments`);
+                const comments = await response.json();
+                const commentsContainer = document.getElementById(`comments-${testimonialId}`);
+                
+                if (comments && comments.length > 0) {
+                    commentsContainer.innerHTML = comments.map(comment => `
+                        <div class="comment-item">
+                            <div class="comment-header">
+                                <span class="comment-author">${comment.user_name || 'Anonymous'}</span>
+                                <span class="comment-date">${new Date(comment.created_at).toLocaleDateString()}</span>
+                            </div>
+                            <div class="comment-text">${comment.text}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    commentsContainer.innerHTML = '<p style="color: var(--dark-text-muted); font-size: 0.9rem;">No comments yet. Be the first to comment!</p>';
+                }
+            } catch (error) {
+                console.error('Error loading comments:', error);
+            }
+        }
+
+        async function addComment(event, testimonialId) {
+            event.preventDefault();
+            const input = document.getElementById(`comment-input-${testimonialId}`);
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            try {
+                const response = await fetch(`/api/testimonials/${testimonialId}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    input.value = '';
+                    loadComments(testimonialId);
+                } else {
+                    alert('Error adding comment: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error adding comment:', error);
+                alert('Error adding comment');
+            }
+        }
+    </script>
+</body>
+</html> 

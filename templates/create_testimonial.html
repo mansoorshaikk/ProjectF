@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Testimonial - Test Floww</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #4facfe;
+            --warning-color: #ffc107;
+            --danger-color: #ff6b6b;
+            --dark-bg: #0f0f23;
+            --dark-card: #1a1a2e;
+            --dark-text: #ffffff;
+            --dark-text-muted: #a0a0a0;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .brand-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .form-container {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--dark-text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 0 1rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--dark-card);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--dark-text-muted);
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+            background: var(--gradient-1);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        .step-text {
+            color: var(--dark-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .step.active .step-text {
+            color: var(--dark-text);
+            font-weight: 600;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            color: var(--dark-text);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--dark-text);
+            border-radius: 10px;
+            padding: 0.75rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
+            color: var(--dark-text);
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: var(--dark-text-muted);
+        }
+
+        .company-search-results {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background: var(--dark-card);
+            margin-top: 0.5rem;
+        }
+
+        .company-result {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .company-result:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .company-result:last-child {
+            border-bottom: none;
+        }
+
+        .company-name {
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.25rem;
+        }
+
+        .company-info {
+            font-size: 0.9rem;
+            color: var(--dark-text-muted);
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .star {
+            font-size: 1.5rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .star.filled {
+            color: #ffc107;
+        }
+
+        .star:hover {
+            color: #ffc107;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--dark-text);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
+            color: var(--dark-text);
+        }
+
+        .back-button {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .selected-company {
+            background: rgba(79, 172, 254, 0.1);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .selected-company-name {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .change-company {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .change-company:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+            
+            .step {
+                margin: 0 0.5rem;
+            }
+            
+            .step-text {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="brand-title">
+                    <i class="fas fa-water"></i> Test Floww
+                </div>
+                <a href="/user/dashboard" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="form-container">
+                <div class="page-header">
+                    <h1 class="page-title">Create Testimonial</h1>
+                    <p class="page-subtitle">Share your experience with a company</p>
+                </div>
+
+                <div class="step-indicator">
+                    <div class="step active" id="step1-indicator">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Select Company</div>
+                    </div>
+                    <div class="step" id="step2-indicator">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Write Testimonial</div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Select Company -->
+                <div class="form-step active" id="step1">
+                    <div class="form-group">
+                        <label for="company-search" class="form-label">Search for a company</label>
+                        <input type="text" class="form-control" id="company-search" placeholder="Type company name to search..." autocomplete="off">
+                        <div id="company-search-results" class="company-search-results" style="display: none;"></div>
+                    </div>
+                    
+                    <div id="selected-company-display" style="display: none;">
+                        <div class="selected-company">
+                            <div class="selected-company-name" id="selected-company-name"></div>
+                            <a class="change-company" onclick="changeCompany()">Change company</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Write Testimonial -->
+                <div class="form-step" id="step2">
+                    <form id="testimonial-form">
+                        <div class="form-group">
+                            <label for="testimonial-content" class="form-label">Your Testimonial</label>
+                            <textarea class="form-control" id="testimonial-content" rows="5" placeholder="Write your detailed testimonial here..." required></textarea>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label class="form-label">Rating</label>
+                            <div class="rating-stars" id="rating-stars">
+                                <i class="fas fa-star star" data-rating="1"></i>
+                                <i class="fas fa-star star" data-rating="2"></i>
+                                <i class="fas fa-star star" data-rating="3"></i>
+                                <i class="fas fa-star star" data-rating="4"></i>
+                                <i class="fas fa-star star" data-rating="5"></i>
+                            </div>
+                            <input type="hidden" id="rating-value" name="rating" value="0">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Submit Testimonial</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedCompany = null;
+        let currentStep = 1;
+
+        // Company search functionality
+        const companySearch = document.getElementById('company-search');
+        const searchResults = document.getElementById('company-search-results');
+        const selectedCompanyDisplay = document.getElementById('selected-company-display');
+        const selectedCompanyName = document.getElementById('selected-company-name');
+
+        companySearch.addEventListener('input', debounce(async function() {
+            const query = this.value.trim();
+            if (query.length < 2) {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/companies/search?q=${encodeURIComponent(query)}`);
+                const companies = await response.json();
+                
+                if (companies && companies.length > 0) {
+                    searchResults.innerHTML = companies.map(company => `
+                        <div class="company-result" onclick="selectCompany('${company.name}', ${company.id})">
+                            <div class="company-name">${company.name}</div>
+                            <div class="company-info">${company.testimonial_count || 0} testimonials</div>
+                        </div>
+                    `).join('');
+                    searchResults.style.display = 'block';
+                } else {
+                    searchResults.innerHTML = '<div class="company-result">No companies found</div>';
+                    searchResults.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error searching companies:', error);
+            }
+        }, 300));
+
+        function selectCompany(name, id) {
+            selectedCompany = { name, id };
+            selectedCompanyName.textContent = name;
+            selectedCompanyDisplay.style.display = 'block';
+            searchResults.style.display = 'none';
+            companySearch.value = name;
+            
+            // Enable next step
+            document.getElementById('step1-indicator').classList.add('completed');
+            document.getElementById('step2-indicator').classList.add('active');
+            
+            // Show step 2
+            showStep(2);
+        }
+
+        function changeCompany() {
+            selectedCompany = null;
+            selectedCompanyDisplay.style.display = 'none';
+            companySearch.value = '';
+            companySearch.focus();
+            
+            // Reset step indicators
+            document.getElementById('step1-indicator').classList.remove('completed');
+            document.getElementById('step2-indicator').classList.remove('active');
+            document.getElementById('step1-indicator').classList.add('active');
+            
+            showStep(1);
+        }
+
+        function showStep(step) {
+            currentStep = step;
+            
+            // Hide all steps
+            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+            
+            // Show current step
+            document.getElementById(`step${step}`).classList.add('active');
+        }
+
+        // Rating functionality
+        const stars = document.querySelectorAll('.star');
+        const ratingValue = document.getElementById('rating-value');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.getAttribute('data-rating');
+                setRating(rating);
+            });
+        });
+
+        function setRating(rating) {
+            ratingValue.value = rating;
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('filled');
+                } else {
+                    star.classList.remove('filled');
+                }
+            });
+        }
+
+        // Form submission
+        document.getElementById('testimonial-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!selectedCompany) {
+                alert('Please select a company first');
+                return;
+            }
+
+            const content = document.getElementById('testimonial-content').value.trim();
+            const rating = parseInt(document.getElementById('rating-value').value);
+
+            if (!content) {
+                alert('Please write your testimonial');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/testimonials/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        company_name: selectedCompany.name,
+                        content: content,
+                        rating: rating
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('Testimonial submitted successfully! It will be reviewed by the company.');
+                    window.location.href = '/user/testimonials';
+                } else {
+                    alert('Error submitting testimonial: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error submitting testimonial:', error);
+                alert('Error submitting testimonial');
+            }
+        });
+
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    </script>
+</body>
+</html> 
